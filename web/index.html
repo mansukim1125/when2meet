@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f8fc">
+  <title>날모아 · 모임 날짜 조율</title>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./config.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="./"><img src="./icon.svg" alt="" width="34" height="34">날모아</a>
+      <a class="new-link" href="./"><span aria-hidden="true">＋</span> 새 모임</a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="page-intro">
+      <h1 id="page-title">새 모임 만들기</h1>
+      <p id="page-description">후보 기간을 정하고 링크를 공유하세요.</p>
+      <button type="button" class="share-button" id="share-button" hidden>링크 복사</button>
+      <input id="share-fallback" class="field" aria-label="공유 링크" readonly hidden>
+    </div>
+
+    <div id="create-view" class="layout" hidden>
+      <form id="create-form" class="card main-card">
+        <div class="details">
+          <h2>모임 정보</h2>
+          <label for="title">모임 이름</label>
+          <input class="field" id="title" name="title" placeholder="예: 대학 친구들 연말 모임" maxlength="80" required>
+          <label for="description">모임 설명 <span class="optional">선택</span></label>
+          <textarea class="field" id="description" name="description" placeholder="참여자에게 전하고 싶은 내용을 적어 주세요." maxlength="300" rows="2"></textarea>
+        </div>
+        <div class="date-section">
+          <h2>후보 기간</h2>
+          <p class="hint" id="create-calendar-hint">달력에서 시작일을 선택해 주세요.</p>
+          <div class="month-bar">
+            <h3 id="create-month" aria-live="polite"></h3>
+            <div class="month-buttons">
+              <button class="icon-button" type="button" id="create-prev" aria-label="이전 달">‹</button>
+              <button class="icon-button" type="button" id="create-next" aria-label="다음 달">›</button>
+            </div>
+          </div>
+          <div class="calendar weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+          <div class="calendar days" id="create-days" role="group" aria-labelledby="create-month" aria-describedby="create-calendar-hint"></div>
+        </div>
+      </form>
+
+      <aside class="card side-card">
+        <div class="side-heading">
+          <img src="./icon.svg" alt="" width="38" height="38">
+          <h2>선택한 기간</h2>
+          <span class="counter" id="date-count" aria-live="polite">0일</span>
+        </div>
+        <p class="range-summary" id="range-summary" aria-live="polite">시작일과 종료일을 선택해 주세요.</p>
+        <button type="button" class="text-button range-reset" id="reset-range" hidden>기간 초기화</button>
+        <button form="create-form" type="submit" class="primary" id="create-button" disabled>모임 만들기</button>
+        <p class="form-message" id="create-message" role="alert" hidden></p>
+      </aside>
+    </div>
+
+    <div id="poll-view" class="layout" hidden>
+      <form id="response-form" class="card main-card response-card">
+        <h2>가능한 날짜 선택</h2>
+        <p class="hint" id="response-hint">달력에서 가능한 날짜를 모두 선택해 주세요. 가능한 날이 없다면 빈 상태로 제출할 수 있어요.</p>
+        <label for="name">이름</label>
+        <input id="name" class="field" name="name" placeholder="참여자 이름" autocomplete="nickname" maxlength="40" required>
+        <div class="month-bar">
+          <h3 id="vote-month" aria-live="polite"></h3>
+          <div class="month-buttons">
+            <button class="icon-button" type="button" id="vote-prev" aria-label="이전 달">‹</button>
+            <button class="icon-button" type="button" id="vote-next" aria-label="다음 달">›</button>
+          </div>
+        </div>
+        <div class="calendar weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div class="calendar days" id="vote-days" role="group" aria-labelledby="vote-month" aria-describedby="response-hint"></div>
+        <p class="hint selection-count" id="vote-count" aria-live="polite"></p>
+        <button class="primary" type="submit" id="response-button">응답 저장</button>
+        <p class="form-message" id="response-message" role="status" hidden></p>
+      </form>
+      <section class="card main-card results-card" aria-labelledby="results-heading">
+        <div class="results-heading">
+          <h2 id="results-heading">날짜별 결과</h2>
+          <button class="text-button" type="button" id="refresh-button">새로고침</button>
+        </div>
+        <p id="response-count" class="hint" aria-live="polite"></p>
+        <div class="month-bar">
+          <h3 id="results-month" aria-live="polite"></h3>
+          <div class="month-buttons">
+            <button class="icon-button" type="button" id="results-prev" aria-label="결과 이전 달">‹</button>
+            <button class="icon-button" type="button" id="results-next" aria-label="결과 다음 달">›</button>
+          </div>
+        </div>
+        <div class="calendar weekdays" aria-hidden="true"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+        <div class="calendar days results-calendar" id="results-days" role="group" aria-labelledby="results-month"></div>
+        <div class="heat-legend" id="results-legend" role="img" hidden>
+          <span>0명</span><span class="heat-ramp" aria-hidden="true"></span><span id="results-maximum"></span>
+        </div>
+        <div class="result-detail" id="result-detail" aria-live="polite" aria-atomic="true">
+          <p class="hint">날짜를 누르면 가능한 사람을 볼 수 있어요.</p>
+        </div>
+        <p class="form-message" id="results-message" role="status" hidden></p>
+      </section>
+    </div>
+    <p id="page-status" class="page-status" role="status" hidden></p>
+  </main>
+</body>
+</html>
