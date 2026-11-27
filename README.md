@@ -31,6 +31,6 @@ supabase functions deploy nalmoa --project-ref YOUR_PROJECT_REF --use-api
 
 ## GitHub Pages 배포
 
-1. GitHub 저장소의 **Settings → Secrets and variables → Actions → Variables**에서 `API_BASE_URL`에 `https://YOUR_PROJECT_REF.supabase.co/functions/v1/nalmoa`를 설정합니다.
+1. 배포 워크플로에는 현재 날모아 프로젝트의 공개 Edge Function 주소가 기본값으로 설정돼 있습니다. 다른 Supabase 프로젝트를 배포할 때는 GitHub 저장소의 **Settings → Secrets and variables → Actions → Variables**에서 `NALMOA_API_BASE_URL`에 `https://YOUR_PROJECT_REF.supabase.co/functions/v1/nalmoa`를 설정합니다.
 2. **Settings → Pages → Source**를 **GitHub Actions**로 설정합니다. `main` 브랜치에 푸시하거나 **Actions → Deploy GitHub Pages → Run workflow**를 실행합니다. [GitHub Pages 게시 소스 문서](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 3. 배포된 Pages 주소에서 모임을 만든 뒤 공유 링크를 열어 응답이 저장되는지 확인합니다. 같은 Pages 주소에서 기존 모임 링크와 해당 브라우저의 응답 수정 권한을 계속 사용할 수 있습니다.
