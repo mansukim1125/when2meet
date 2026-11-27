@@ -1,0 +1,4 @@
+project_id = "nalmoa"
+
+[functions.nalmoa]
+verify_jwt = false
